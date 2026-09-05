@@ -72,13 +72,14 @@ def build_home_html():
         first = page_slug(sub, sub["sections"][0]["pages"][0])
         cards.append(
             '      <a class="subj-card" href="#%s" style="--accent:%s">\n'
+            '        <svg class="subj-card-ico" aria-hidden="true"><use href="#m-%s"></use></svg>\n'
             '        <span class="subj-tag">%s</span>\n'
             '        <h3>%s</h3>\n'
             '        <p>%s</p>\n'
             '        <span class="subj-meta"><span class="sc-count">%d pages</span>'
             '<span class="sc-prog" data-subject="%s"></span></span>\n'
             '      </a>' % (
-                first, sub["accent"], sub["tag"], sub["name"], sub["blurb"],
+                first, sub["accent"], sub["id"], sub["tag"], sub["name"], sub["blurb"],
                 npages, sub["id"],
             )
         )
@@ -191,7 +192,7 @@ nav.tree{font-size:.9rem}
   padding:.5rem .6rem;border-radius:.5rem;cursor:pointer;display:flex;align-items:center;gap:.5rem;
 }
 .tree .subj>button:hover{background:var(--chip)}
-.tree .subj>button .dot{width:.6rem;height:.6rem;border-radius:99px;flex:0 0 .6rem}
+.tree .subj>button .subj-ico{width:1.15rem;height:1.15rem;flex:0 0 1.15rem;fill:none;stroke:currentColor;stroke-width:1.6}
 .tree .subj>button .caret{margin-left:auto;transition:transform .15s;color:var(--ink-soft)}
 .tree .subj.collapsed>button .caret{transform:rotate(-90deg)}
 .tree .subj.collapsed .sec-list{display:none}
@@ -305,7 +306,9 @@ tr:last-child td{border-bottom:0}
   display:block;border:1px solid var(--line);border-radius:.8rem;padding:1.1rem 1.15rem;background:var(--panel);
   box-shadow:var(--shadow);border-top:3px solid var(--accent);color:var(--ink);
 }
+.subj-card{position:relative;overflow:hidden}
 .subj-card:hover{text-decoration:none;transform:translateY(-2px);transition:transform .12s}
+.subj-card-ico{position:absolute;right:.7rem;top:.7rem;width:3rem;height:3rem;color:var(--accent);opacity:.15;fill:none;stroke:currentColor;stroke-width:1.5;pointer-events:none}
 .subj-tag{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--accent)}
 .subj-card h3{margin:.3rem 0 .4rem;font-size:1.15rem}
 .subj-card p{margin:0;color:var(--ink-soft);font-size:.88rem;line-height:1.55}
@@ -433,7 +436,8 @@ function buildNav(){
   NAV.forEach(function(s){
     var subj=document.createElement("div"); subj.className="subj collapsed"; subj.dataset.id=s.id;
     var btn=document.createElement("button");
-    btn.innerHTML='<span class="dot" style="background:'+s.accent+'"></span><span>'+s.name+
+    btn.innerHTML='<svg class="subj-ico" style="color:'+s.accent+'" aria-hidden="true">'+
+      '<use href="#m-'+s.id+'"></use></svg><span>'+s.name+
       '</span><span class="caret">▾</span>';
     btn.onclick=function(){ subj.classList.toggle("collapsed"); };
     subj.appendChild(btn);
@@ -590,6 +594,22 @@ def render_index():
 <style>%s</style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+  <symbol id="m-food" viewBox="0 0 24 24">
+    <path d="M4.5 12.5C4.5 6 10 3.2 19.5 3.5c.3 9.5-2.5 15-9 15-4 0-6-3-6-6Z" stroke-linejoin="round"/>
+    <path d="M6.5 17.5C10.5 13.5 15 8.5 18.5 4.5" stroke-linecap="round"/>
+    <path d="M9.7 14.3 12.5 12M11 11.3 9 9.3M14.3 11 16.6 8.7M13 9.5 11.2 7.6" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="m-kids" viewBox="0 0 24 24">
+    <path d="M12 8.2C10.3 5.9 6.7 5.3 5 7.6c-1.9 2.6-1 8 1.4 11.1C7.7 20.3 9.7 21 12 21s4.3-.7 5.6-2.3C20 15.6 20.9 10.2 19 7.6c-1.7-2.3-5.3-1.7-7 .6Z" stroke-linejoin="round"/>
+    <path d="M12 8.2c.2-2.3 1.7-3.8 4-4.2" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="m-juice" viewBox="0 0 24 24">
+    <path d="M6 4.5h12l-1.3 14.2A2.2 2.2 0 0 1 14.5 20.7h-5A2.2 2.2 0 0 1 7.3 18.7L6 4.5Z" stroke-linejoin="round"/>
+    <path d="M6.7 9.5h10.6" stroke-linecap="round"/>
+    <path d="M14.5 2.3c.3 1.8-1.4 2.6-1.3 4.4" stroke-linecap="round"/>
+  </symbol>
+</defs></svg>
 <div class="app" id="app">
   <div class="backdrop" id="backdrop"></div>
   <aside class="sidebar" id="sidebar">

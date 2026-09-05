@@ -1,5 +1,5 @@
 /* Leo-Health service worker — cache-first, versioned by content hash */
-var CACHE = "leo-health-5fffb10b4747";
+var CACHE = "leo-health-35f5a468225f";
 var ASSETS = ["./", "./index.html", "./manifest.json", "./icon-192.png", "./icon-512.png"];
 self.addEventListener("install", function(e){
   self.skipWaiting();
